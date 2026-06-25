@@ -1,9 +1,19 @@
-import { useRef, useEffect, forwardRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import type { ThreeEvent } from '@react-three/fiber';
 import { EffectComposer, wrapEffect } from '@react-three/postprocessing';
 import { Effect } from 'postprocessing';
 import * as THREE from 'three';
+
+export type GradientRange = number | readonly [number, number];
+
+export function parseGradientRange(value: GradientRange): [number, number] {
+  if (typeof value === 'number') {
+    if (value === 0) return [0, 0];
+    return [value, 0];
+  }
+  return [value[0], value[1]];
+}
 
 const waveVertexShader = `
 precision highp float;
@@ -28,6 +38,10 @@ uniform vec2 mousePos;
 uniform int enableMouseInteraction;
 uniform float mouseRadius;
 uniform float seed;
+uniform vec2 downGradientRange;
+uniform vec2 upGradientRange;
+uniform float contrast;
+uniform float gradientEase;
 
 vec4 mod289(vec4 x) { return x - floor(x * (1.0/289.0)) * 289.0; }
 vec4 permute(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }
@@ -81,8 +95,42 @@ float pattern(vec2 p) {
   return fbm(p + fbm(p2)); 
 }
 
+float applyGradientRange(float y, vec2 range, bool fromBottom) {
+  float startPct = range.x;
+  float endPct = range.y;
+  if (startPct == 0.0 && endPct == 0.0) return 1.0;
+
+  float startY = fromBottom ? startPct / 100.0 : 1.0 - startPct / 100.0;
+  float endY = fromBottom ? endPct / 100.0 : 1.0 - endPct / 100.0;
+
+  if (fromBottom) {
+    if (startY <= endY) return 1.0;
+    if (y >= startY) return 1.0;
+    if (y <= endY) return 0.0;
+    float t = (y - endY) / (startY - endY);
+    t = smoothstep(0.0, 1.0, clamp(t, 0.0, 1.0));
+    return pow(t, gradientEase);
+  }
+
+  if (endY <= startY) return 1.0;
+  if (y <= startY) return 1.0;
+  if (y >= endY) return 0.0;
+  float t = (endY - y) / (endY - startY);
+  t = smoothstep(0.0, 1.0, clamp(t, 0.0, 1.0));
+  return pow(t, gradientEase);
+}
+
+float effectStrengthForPosition(float y) {
+  float strength = 1.0;
+  strength *= applyGradientRange(y, downGradientRange, true);
+  strength *= applyGradientRange(y, upGradientRange, false);
+  return strength;
+}
+
 void main() {
   vec2 uv = gl_FragCoord.xy / resolution.xy;
+  float screenY = gl_FragCoord.y / resolution.y;
+  float strength = effectStrengthForPosition(screenY);
   uv -= 0.5;
   uv.x *= resolution.x / resolution.y;
   float f = pattern(uv);
@@ -93,6 +141,9 @@ void main() {
     float effect = 1.0 - smoothstep(0.0, mouseRadius, dist);
     f -= 0.5 * effect;
   }
+  f *= strength;
+  f = clamp(f, 0.0, 1.0);
+  f = pow(f, contrast);
   vec3 col = mix(vec3(0.0), waveColor, f);
   gl_FragColor = vec4(col, 1.0);
 }
@@ -136,10 +187,13 @@ void mainImage(in vec4 inputColor, in vec2 uv, out vec4 outputColor) {
 
 class RetroEffectImpl extends Effect {
   declare uniforms: Map<string, THREE.Uniform<any>>;
-  constructor() {
+  constructor(options: {
+    colorNum?: number;
+    pixelSize?: number;
+  } = {}) {
     const uniforms = new Map<string, THREE.Uniform<any>>([
-      ['colorNum', new THREE.Uniform(4.0)],
-      ['pixelSize', new THREE.Uniform(2.0)]
+      ['colorNum', new THREE.Uniform(options.colorNum ?? 4.0)],
+      ['pixelSize', new THREE.Uniform(options.pixelSize ?? 2.0)],
     ]);
     super('RetroEffect', ditherFragmentShader, { uniforms });
     this.uniforms = uniforms;
@@ -158,13 +212,7 @@ class RetroEffectImpl extends Effect {
   }
 }
 
-const RetroEffect = forwardRef<RetroEffectImpl, { colorNum: number; pixelSize: number }>((props, ref) => {
-  const { colorNum, pixelSize } = props;
-  const WrappedRetroEffect = wrapEffect(RetroEffectImpl);
-  return <WrappedRetroEffect ref={ref} colorNum={colorNum} pixelSize={pixelSize} />;
-});
-
-RetroEffect.displayName = 'RetroEffect';
+const RetroEffect = wrapEffect(RetroEffectImpl);
 
 interface WaveUniforms {
   [key: string]: THREE.Uniform<any>;
@@ -178,6 +226,10 @@ interface WaveUniforms {
   enableMouseInteraction: THREE.Uniform<number>;
   mouseRadius: THREE.Uniform<number>;
   seed: THREE.Uniform<number>;
+  downGradientRange: THREE.Uniform<THREE.Vector2>;
+  upGradientRange: THREE.Uniform<THREE.Vector2>;
+  contrast: THREE.Uniform<number>;
+  gradientEase: THREE.Uniform<number>;
 }
 
 interface DitheredWavesProps {
@@ -187,6 +239,10 @@ interface DitheredWavesProps {
   waveColor: [number, number, number];
   colorNum: number;
   pixelSize: number;
+  downGradient: GradientRange;
+  upGradient: GradientRange;
+  contrast: number;
+  gradientEase: number;
   disableAnimation: boolean;
   enableMouseInteraction: boolean;
   mouseRadius: number;
@@ -200,6 +256,10 @@ function DitheredWaves({
   waveColor,
   colorNum,
   pixelSize,
+  downGradient,
+  upGradient,
+  contrast,
+  gradientEase,
   disableAnimation,
   enableMouseInteraction,
   mouseRadius,
@@ -219,7 +279,15 @@ function DitheredWaves({
     mousePos: new THREE.Uniform(new THREE.Vector2(0, 0)),
     enableMouseInteraction: new THREE.Uniform(enableMouseInteraction ? 1 : 0),
     mouseRadius: new THREE.Uniform(mouseRadius),
-    seed: new THREE.Uniform(seed)
+    seed: new THREE.Uniform(seed),
+    downGradientRange: new THREE.Uniform(
+      new THREE.Vector2(...parseGradientRange(downGradient)),
+    ),
+    upGradientRange: new THREE.Uniform(
+      new THREE.Vector2(...parseGradientRange(upGradient)),
+    ),
+    contrast: new THREE.Uniform(contrast),
+    gradientEase: new THREE.Uniform(gradientEase),
   });
 
   useEffect(() => {
@@ -233,8 +301,13 @@ function DitheredWaves({
   }, [size, gl]);
 
   const prevColor = useRef([...waveColor]);
-  useFrame(({ clock }) => {
+  useFrame(({ clock, size: frameSize }) => {
     const u = waveUniformsRef.current;
+    const dpr = gl.getPixelRatio();
+    u.resolution.value.set(
+      Math.floor(frameSize.width * dpr),
+      Math.floor(frameSize.height * dpr),
+    );
 
     if (!disableAnimation) {
       u.time.value = clock.getElapsedTime();
@@ -252,6 +325,12 @@ function DitheredWaves({
     u.enableMouseInteraction.value = enableMouseInteraction ? 1 : 0;
     u.mouseRadius.value = mouseRadius;
     u.seed.value = seed;
+    const [downStart, downEnd] = parseGradientRange(downGradient);
+    const [upStart, upEnd] = parseGradientRange(upGradient);
+    u.downGradientRange.value.set(downStart, downEnd);
+    u.upGradientRange.value.set(upStart, upEnd);
+    u.contrast.value = contrast;
+    u.gradientEase.value = gradientEase;
 
     if (enableMouseInteraction) {
       u.mousePos.value.copy(mouseRef.current);
@@ -280,15 +359,17 @@ function DitheredWaves({
         <RetroEffect colorNum={colorNum} pixelSize={pixelSize} />
       </EffectComposer>
 
-      <mesh
-        onPointerMove={handlePointerMove}
-        position={[0, 0, 0.01]}
-        scale={[viewport.width, viewport.height, 1]}
-        visible={false}
-      >
-        <planeGeometry args={[1, 1]} />
-        <meshBasicMaterial transparent opacity={0} />
-      </mesh>
+      {enableMouseInteraction ? (
+        <mesh
+          onPointerMove={handlePointerMove}
+          position={[0, 0, 0.01]}
+          scale={[viewport.width, viewport.height, 1]}
+          visible={false}
+        >
+          <planeGeometry args={[1, 1]} />
+          <meshBasicMaterial transparent opacity={0} />
+        </mesh>
+      ) : null}
     </>
   );
 }
@@ -300,6 +381,21 @@ interface DitherProps {
   waveColor?: [number, number, number];
   colorNum?: number;
   pixelSize?: number;
+  /**
+   * Noise fade from the bottom edge. Pass [start, end] as % from bottom:
+   * - start: where fade begins (full noise above)
+   * - end: where noise reaches zero (can be negative to soften fade)
+   * A single number `40` is shorthand for `[40, 0]`.
+   */
+  downGradient?: GradientRange;
+  /**
+   * Noise fade from the top edge. Pass [start, end] as % from top (same rules as downGradient).
+   */
+  upGradient?: GradientRange;
+  /** Higher values crush mid-tone "mist" toward black (1 = linear, no change). */
+  contrast?: number;
+  /** Fade curve softness — lower = gentler, longer roll-off (1 = smoothstep only). */
+  gradientEase?: number;
   disableAnimation?: boolean;
   enableMouseInteraction?: boolean;
   mouseRadius?: number;
@@ -313,6 +409,10 @@ export default function Dither({
   waveColor = [0.5, 0.5, 0.5],
   colorNum = 4,
   pixelSize = 2,
+  downGradient = 0,
+  upGradient = 0,
+  contrast = 1,
+  gradientEase = 0.55,
   disableAnimation = false,
   enableMouseInteraction = true,
   mouseRadius = 1,
@@ -324,6 +424,9 @@ export default function Dither({
       camera={{ position: [0, 0, 6] }}
       dpr={1}
       gl={{ antialias: true, preserveDrawingBuffer: true }}
+      onCreated={({ gl }) => {
+        gl.setClearColor(0x000000)
+      }}
     >
       <DitheredWaves
         waveSpeed={waveSpeed}
@@ -332,6 +435,10 @@ export default function Dither({
         waveColor={waveColor}
         colorNum={colorNum}
         pixelSize={pixelSize}
+        downGradient={downGradient}
+        upGradient={upGradient}
+        contrast={contrast}
+        gradientEase={gradientEase}
         disableAnimation={disableAnimation}
         enableMouseInteraction={enableMouseInteraction}
         mouseRadius={mouseRadius}

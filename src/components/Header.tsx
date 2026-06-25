@@ -37,8 +37,8 @@ function DropdownPages({ startPage }: { startPage: number }) {
 
 export function Header() {
   return (
-    <header className="bg-transparent text-foreground">
-      <div className="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-6 mt-4">
+    <header className="bg-transparent pt-4 text-foreground">
+      <div className="mx-auto flex h-16 max-w-[90rem] items-center justify-between px-6">
         {/* Logo */}
         <a href="#" className="flex items-center gap-2 font-semibold text-foreground">
           <span className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-md text-sm">
