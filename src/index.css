@@ -9,6 +9,12 @@
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) * 1.4);
+  --color-arctic-powder: var(--arctic-powder);
+  --color-mystic-mint: var(--mystic-mint);
+  --color-forsythia: var(--forsythia);
+  --color-deep-saffron: var(--deep-saffron);
+  --color-nocturnal-expedition: var(--nocturnal-expedition);
+  --color-oceanic-noir: var(--oceanic-noir);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -36,55 +42,65 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+
+  /* Brand palette */
+  --arctic-powder: #f1f6f4;
+  --mystic-mint: #d9e8e2;
+  --forsythia: #ffc801;
+  --deep-saffron: #ff9932;
+  --nocturnal-expedition: #114c5a;
+  --oceanic-noir: #172b36;
+
+  /* Theme mapping */
+  --background: var(--nocturnal-expedition);
+  --foreground: var(--arctic-powder);
+  --card: var(--oceanic-noir);
+  --card-foreground: var(--arctic-powder);
+  --popover: var(--arctic-powder);
+  --popover-foreground: var(--oceanic-noir);
+  --primary: var(--forsythia);
+  --primary-foreground: var(--oceanic-noir);
+  --secondary: var(--oceanic-noir);
+  --secondary-foreground: var(--arctic-powder);
+  --muted: var(--oceanic-noir);
+  --muted-foreground: var(--mystic-mint);
+  --accent: var(--deep-saffron);
+  --accent-foreground: var(--oceanic-noir);
+  --destructive: #e5484d;
+  --border: color-mix(in srgb, var(--mystic-mint) 25%, transparent);
+  --input: var(--oceanic-noir);
+  --ring: var(--mystic-mint);
+  --chart-1: var(--forsythia);
+  --chart-2: var(--deep-saffron);
+  --chart-3: var(--mystic-mint);
+  --chart-4: var(--nocturnal-expedition);
+  --chart-5: var(--oceanic-noir);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: var(--oceanic-noir);
+  --foreground: var(--arctic-powder);
+  --card: var(--nocturnal-expedition);
+  --card-foreground: var(--arctic-powder);
+  --popover: var(--arctic-powder);
+  --popover-foreground: var(--oceanic-noir);
+  --primary: var(--forsythia);
+  --primary-foreground: var(--oceanic-noir);
+  --secondary: var(--nocturnal-expedition);
+  --secondary-foreground: var(--arctic-powder);
+  --muted: var(--nocturnal-expedition);
+  --muted-foreground: var(--mystic-mint);
+  --accent: var(--deep-saffron);
+  --accent-foreground: var(--oceanic-noir);
+  --destructive: #e5484d;
+  --border: color-mix(in srgb, var(--mystic-mint) 20%, transparent);
+  --input: var(--nocturnal-expedition);
+  --ring: var(--mystic-mint);
+  --chart-1: var(--forsythia);
+  --chart-2: var(--deep-saffron);
+  --chart-3: var(--mystic-mint);
+  --chart-4: var(--nocturnal-expedition);
+  --chart-5: var(--arctic-powder);
 }
 
 @layer base {

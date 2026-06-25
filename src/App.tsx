@@ -1,16 +1,18 @@
-import { Button } from '@/components/ui/button'
+import { Header } from '@/components/Header'
 
 function App() {
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-4 p-8">
-      <h1 className="text-3xl font-semibold tracking-tight">
-        Parcel Finder
-      </h1>
-      <p className="text-muted-foreground text-center text-sm">
-        React + Vite + TypeScript with shadcn/ui and Magic UI ready to go.
-      </p>
-      <Button>Get started</Button>
-    </main>
+    <>
+      <Header />
+      <main className="bg-background text-foreground mx-auto max-w-[90rem] px-6 py-16">
+        <h1 className="text-3xl font-semibold tracking-tight">
+          Parcel Finder
+        </h1>
+        <p className="text-muted-foreground mt-2 text-sm">
+          Landing page content goes here.
+        </p>
+      </main>
+    </>
   )
 }
 
