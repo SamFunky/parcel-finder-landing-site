@@ -139,6 +139,53 @@ function App() {
           </div>
         </div>
       </section>
+
+      <section className="w-full bg-white py-24 text-[#172B36] md:py-32">
+        <div className="mx-auto max-w-[90rem] px-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#114C5A]/75">
+              <span className="h-px w-8 bg-[#114C5A]/30" />
+              <span>Results</span>
+              <span className="h-px w-8 bg-[#114C5A]/30" />
+            </div>
+            <h2 className="mt-6 text-4xl font-semibold tracking-tight md:text-5xl">
+              Outcomes teams care about
+            </h2>
+            <p className="mt-4 text-lg text-[#114C5A]/80">
+              Faster recommendations, better consistency, and clear reasoning behind every shortlist.
+            </p>
+          </div>
+
+          <div className="mx-auto mt-14 grid max-w-5xl gap-5 md:grid-cols-3">
+            <Card className="border-[#114C5A]/15 bg-[#F1F6F4] py-0 text-[#172B36] shadow-none">
+              <CardHeader className="p-6 pb-3">
+                <CardTitle className="text-4xl">70%</CardTitle>
+              </CardHeader>
+              <CardContent className="px-6 pb-6">
+                <p className="text-sm text-[#114C5A]/80">Less time spent creating initial parcel shortlists.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-[#114C5A]/15 bg-[#F1F6F4] py-0 text-[#172B36] shadow-none">
+              <CardHeader className="p-6 pb-3">
+                <CardTitle className="text-4xl">3x</CardTitle>
+              </CardHeader>
+              <CardContent className="px-6 pb-6">
+                <p className="text-sm text-[#114C5A]/80">More candidate parcels evaluated in the same review window.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-[#114C5A]/15 bg-[#F1F6F4] py-0 text-[#172B36] shadow-none">
+              <CardHeader className="p-6 pb-3">
+                <CardTitle className="text-4xl">100%</CardTitle>
+              </CardHeader>
+              <CardContent className="px-6 pb-6">
+                <p className="text-sm text-[#114C5A]/80">Traceable scoring rationale for every recommendation.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
     </>
   )
 }
