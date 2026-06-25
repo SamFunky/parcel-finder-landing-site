@@ -55,7 +55,27 @@ function App() {
         </div>
       </main>
 
-      <section className="h-svh w-full bg-white" />
+      <section className="w-full bg-white py-24 text-[#172B36] md:py-32">
+        <div className="mx-auto max-w-[90rem] px-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <div className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-[#114C5A]/75">
+              <span className="h-px w-8 bg-[#114C5A]/30" />
+              <span>Problem</span>
+              <span className="h-px w-8 bg-[#114C5A]/30" />
+            </div>
+            <h2 className="mt-6 text-4xl font-semibold tracking-tight md:text-5xl">
+              Picking the right parcel is still mostly manual work
+            </h2>
+            <p className="mt-4 text-lg text-[#114C5A]/80">
+              Teams waste hours comparing options, double-checking constraints, and revisiting decisions.
+              The process is slow, inconsistent, and hard to trust at scale.
+            </p>
+            <p className="mt-4 text-base text-[#114C5A]/70">
+              Most teams are still stitching together spreadsheets, map tools, and manual scoring.
+            </p>
+          </div>
+        </div>
+      </section>
     </>
   )
 }
