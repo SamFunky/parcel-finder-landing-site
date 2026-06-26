@@ -28,7 +28,7 @@ const CATEGORY_TAGS = [
 
 export function SolutionSection() {
   return (
-    <section className="w-full bg-black py-24 text-foreground md:py-32">
+    <section id="solution" className="w-full bg-carbon py-24 text-foreground md:py-32">
       <div className="mx-auto max-w-[90rem] px-6">
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-mystic-mint/75">

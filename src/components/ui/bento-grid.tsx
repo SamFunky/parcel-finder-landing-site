@@ -53,7 +53,7 @@ const BentoTile = ({
         accent
       )}
     />
-    <div className="relative z-10 flex size-10 items-center justify-center rounded-lg border border-mystic-mint/20 bg-black/30 text-mystic-mint">
+    <div className="relative z-10 flex size-10 items-center justify-center rounded-lg border border-mystic-mint/20 bg-carbon/30 text-mystic-mint">
       {icon}
     </div>
     <div className="relative z-10 mt-auto pt-6">

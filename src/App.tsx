@@ -1,4 +1,5 @@
 import { CtaSection } from '@/components/CtaSection'
+import { Footer } from '@/components/Footer'
 import { FaqSection } from '@/components/FaqSection'
 import { Header } from '@/components/Header'
 import { PricingSection } from '@/components/PricingSection'
@@ -11,7 +12,7 @@ import { Safari } from '@/components/ui/safari'
 function App() {
   return (
     <>
-      <main className="text-foreground relative min-h-svh w-full flow-root overflow-x-hidden bg-black">
+      <main className="text-foreground relative min-h-svh w-full flow-root overflow-x-hidden bg-carbon">
         <div className="pointer-events-none absolute inset-0">
           {/* <Dither
             waveColor={[0.067, 0.298, 0.353]}
@@ -59,7 +60,7 @@ function App() {
               />
               <div
                 aria-hidden
-                className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-transparent to-black"
+                className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-transparent to-carbon"
               />
             </div>
           </section>
@@ -97,6 +98,8 @@ function App() {
       <FaqSection />
 
       <CtaSection />
+
+      <Footer />
     </>
   )
 }

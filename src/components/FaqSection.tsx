@@ -59,7 +59,7 @@ function FaqAccordionSizer() {
 
 export function FaqSection() {
   return (
-    <section className="w-full bg-black py-24 text-foreground md:py-32">
+    <section id="faq" className="w-full bg-carbon py-24 text-foreground md:py-32">
       <div className="mx-auto max-w-[90rem] px-6">
         <div className="mx-auto max-w-6xl lg:grid lg:grid-cols-[1fr_1.35fr] lg:items-start lg:gap-16 xl:gap-24">
           <div className="lg:sticky lg:top-24">

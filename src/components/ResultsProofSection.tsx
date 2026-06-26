@@ -74,7 +74,7 @@ export function ResultsProofSection() {
                 className={
                   index === 1
                     ? "border-forsythia/25 from-forsythia/5 rounded-2xl border bg-gradient-to-br to-transparent p-6 md:p-8"
-                    : "border-mystic-mint/10 rounded-2xl border bg-black/25 p-6 md:p-8"
+                    : "border-mystic-mint/10 rounded-2xl border bg-carbon/25 p-6 md:p-8"
                 }
               >
                 <Quote

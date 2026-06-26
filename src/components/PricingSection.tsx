@@ -46,10 +46,10 @@ const PLANS = [
 
 const CARD_SURFACES: Record<(typeof PLANS)[number]["id"], string> = {
   starter:
-    "bg-[radial-gradient(ellipse_95%_75%_at_0%_0%,#114c5a_0%,transparent_52%),linear-gradient(145deg,#0b1b21_0%,#050d10_55%,#000_100%)]",
-  pro: "bg-[radial-gradient(ellipse_80%_65%_at_50%_-8%,#114c5a_0%,transparent_48%),linear-gradient(180deg,#172b36_0%,#0b1b21_38%,#000_100%)]",
+    "bg-[radial-gradient(ellipse_95%_75%_at_0%_0%,#114c5a_0%,transparent_52%),linear-gradient(145deg,#0b1b21_0%,#050d10_55%,#101010_100%)]",
+  pro: "bg-[radial-gradient(ellipse_80%_65%_at_50%_-8%,#114c5a_0%,transparent_48%),linear-gradient(180deg,#172b36_0%,#0b1b21_38%,#101010_100%)]",
   enterprise:
-    "bg-[radial-gradient(ellipse_95%_75%_at_100%_0%,#114c5a_0%,transparent_52%),linear-gradient(215deg,#0b1b21_0%,#050d10_55%,#000_100%)]",
+    "bg-[radial-gradient(ellipse_95%_75%_at_100%_0%,#114c5a_0%,transparent_52%),linear-gradient(215deg,#0b1b21_0%,#050d10_55%,#101010_100%)]",
 }
 
 function PricingCard({
@@ -138,7 +138,7 @@ function PricingCard({
 
 export function PricingSection() {
   return (
-    <section className="w-full bg-black py-24 text-foreground md:py-32">
+    <section id="pricing" className="w-full bg-carbon py-24 text-foreground md:py-32">
       <div className="mx-auto max-w-[90rem] px-6">
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.2em] text-mystic-mint/75">
